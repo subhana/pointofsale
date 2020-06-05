@@ -1,0 +1,33 @@
+<a href="/salesman/createorder">Create Order</a>
+<br>
+<br>
+
+{% if orders %}
+<div>
+  <form name="myform" method="POST" action="/salesman/main">
+    {% csrf_token %}
+    <input type="text" placeholder="Search by invoice number" name="invoiceno">
+    <button type="submit">Search</button>
+  </form>
+</div>
+<table>
+  <tr>
+    <th>Invoice No</th>
+    <th>Sub Total</th>
+    <th>Vat</th>
+    <th>Discount</th>
+    <th>Total</th>
+  </tr>
+  {% for order in orders %}
+  <tr>
+    <td><a href="/salesman/view/invoice/{{ order.id }}">{{order.invoice_no}}</a></td>
+    <td>{{order.total}}</td>
+    <td>{{order.vat}}</td>
+    <td>{{order.discount}}</td>
+    <td>{{order.final_total}}</td>
+  </tr>
+  {% endfor %}
+</table>
+{% else %}
+<div>No order to display</div>
+{%endif%}

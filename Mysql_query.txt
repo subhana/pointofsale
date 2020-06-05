@@ -1,0 +1,66 @@
+CREATE TABLE IF NOT EXISTS vat (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    country VARCHAR(255) NOT NULL,
+    amount INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+)  ENGINE=INNODB;
+
+INSERT INTO vat (country, amount) VALUES('Bangladesh',5);
+INSERT INTO vat (country, amount) VALUES('USA',7);
+
+CREATE TABLE IF NOT EXISTS item (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    description VARCHAR(255) NOT NULL,
+    price_bdt INT NOT NULL CHECK(price_bdt>10000),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=INNODB;
+INSERT INTO item (description, price_bdt) VALUES('Chair',15000);
+INSERT INTO item (description, price_bdt) VALUES('Table',25000);
+INSERT INTO item (description, price_bdt) VALUES('Couch',40000);
+
+CREATE TABLE IF NOT EXISTS giftcard (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    code VARCHAR(255) NOT NULL UNIQUE,
+    amount SMALLINT NOT NULL CHECK (amount IN (5000, 10000)),
+    description VARCHAR(255),
+    used TINYINT DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+)  ENGINE=INNODB;
+
+INSERT INTO giftcard (code, amount, description) VALUES( LEFT(MD5(NOW()),12) , 5000, 'From Wayfair');
+INSERT INTO giftcard (code, amount, description) VALUES( LEFT(MD5(NOW()),12) , 10000, 'From Wayfair');
+
+
+CREATE TABLE IF NOT EXISTS salesperson (
+   id INT AUTO_INCREMENT PRIMARY KEY,
+   name VARCHAR(255) NOT NULL,
+   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=INNODB;
+
+INSERT INTO salesperson (name) VALUES('Zahir Kazi');
+INSERT INTO salesperson (name) VALUES('Timothy Dalton');
+
+CREATE TABLE IF NOT EXISTS orders (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    invoice_no VARCHAR(255) NOT NULL UNIQUE,
+    salespersonid INT,
+    total FLOAT,
+    vat FLOAT,
+    discount FLOAT,
+    final_total FLOAT,
+    created_at DATETIME,
+    FOREIGN KEY (salespersonid) REFERENCES salesperson(id)
+)  ENGINE=INNODB;
+
+
+CREATE TABLE IF NOT EXISTS orderitem (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    order_id INT,
+    item_id INT,
+    unit INT,
+    price_bdt FLOAT,
+    discount FLOAT,
+    final_total FLOAT,
+    created_at DATETIME,
+    FOREIGN KEY (order_id) REFERENCES orders(id)
+)  ENGINE=INNODB;

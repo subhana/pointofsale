@@ -1,0 +1,24 @@
+<br>
+<br>
+<div>Invoice Number: {{invoice_no}}</div>
+<br>
+<table>
+  <tr>
+    <th>Item Description</th>
+    <th>Unit</th>
+    <th>Price</th>
+    <th>Discount</th>
+    <th>Total</th>
+  </tr>
+  {% for orderItem in orderItems %}
+  <tr>
+    <td>{{orderItem.description}}</td>
+    <td>{{orderItem.unit}}</td>
+    <td>{{orderItem.price}}</td>
+    <td>{{orderItem.discount}}</td>
+    <td>{{orderItem.total}}</td>
+  </tr>
+  {% endfor %}
+</table>
+
+<div>Order Total: {{orderToal}}</div>
